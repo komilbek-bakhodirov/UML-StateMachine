@@ -31,17 +31,15 @@ class LostItem:
       case LostItemState.Init => currentState = LostItemState.Report
       case LostItemState.Report => currentState = LostItemState.ProvideDetail
       case LostItemState.ProvideDetail =>
-        if (submit()){
-          currentState = LostItemState.Stored
-          item.get.location match
+        if (submit()) currentState = LostItemState.Stored
+      case LostItemState.Stored =>
+        item.get.location match
             case Stadtmitte =>
               stored()
               currentState = LostItemState.Final
             case Lichtwiese =>
               currentState = LostItemState.Transport
-        }
       case LostItemState.Transport =>
         transported()
         currentState = LostItemState.Final
-      case LostItemState.Stored => // no action is needed
       case LostItemState.Final => // no action is needed
