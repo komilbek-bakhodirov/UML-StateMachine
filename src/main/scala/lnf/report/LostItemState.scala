@@ -1,5 +1,5 @@
 package lnf.report
 
 enum LostItemState {
-  case Init, Stored, Transport, Final
+  case Init, Report, ProvideDetail, Stored, Transport, Final
 }

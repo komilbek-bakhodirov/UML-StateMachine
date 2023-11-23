@@ -28,7 +28,9 @@ class LostItem:
 
   def transition(): Unit =
     currentState match
-      case LostItemState.Init =>
+      case LostItemState.Init => currentState = LostItemState.Report
+      case LostItemState.Report => currentState = LostItemState.ProvideDetail
+      case LostItemState.ProvideDetail =>
         if (submit()){
           currentState = LostItemState.Stored
           item.get.location match
