@@ -1,9 +1,11 @@
 package lnf.report
 
 import lnf.Item
+import lnf.Location.{Lichtwiese, Stadtmitte}
 
 class LostItem:
   var item: Option[Item] = None
+  var currentState: LostItemState = LostItemState.Init
 
   private def submit(): Boolean = item.isDefined
 
@@ -24,4 +26,20 @@ class LostItem:
     println(raw" |_/ \________/ \___|")
     println(raw"___\_/________\_/______")
 
-  def transition(): Unit = ???
+  def transition(): Unit =
+    currentState match
+      case LostItemState.Init =>
+        if (submit()){
+          currentState = LostItemState.Stored
+          item.get.location match
+            case Stadtmitte =>
+              stored()
+              currentState = LostItemState.Final
+            case Lichtwiese =>
+              currentState = LostItemState.Transport
+        }
+      case LostItemState.Transport =>
+        transported()
+        currentState = LostItemState.Final
+      case LostItemState.Stored => // no action is needed
+      case LostItemState.Final => // no action is needed
